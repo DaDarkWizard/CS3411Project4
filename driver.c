@@ -8,6 +8,7 @@
 
 int main(int argc, char** argv)
 {
+    // TODO: Create pipes.
     // TODO: Create Even Process.
     // TODO: Create Odd Process.
     // TODO: Create Scanner Process.
