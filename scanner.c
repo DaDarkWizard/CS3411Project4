@@ -8,5 +8,6 @@
 
 int main(int argc, char** argv)
 {
+    // Usage: ./scanner <evenOut> <evenIn> <oddOut> <oddIn>
     return -1;
 }
