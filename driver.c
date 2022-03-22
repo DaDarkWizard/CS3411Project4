@@ -64,7 +64,7 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    // TODO: Create Even Process.
+    // Create Even Process.
     
     pid_t fork_result = fork();
     if(fork_result == -1)
@@ -139,7 +139,7 @@ int main(int argc, char** argv)
         return -1;
     }
     
-    // TODO: Create Odd Process.
+    // Create Odd Process.
     fork_result = fork();
     if(fork_result == -1)
     {
@@ -216,7 +216,7 @@ int main(int argc, char** argv)
         execvp(args[0], args);
         return -1;
     }
-    // TODO: Create Scanner Process.
+    // Create Scanner Process.
     fork_result = fork();
     if(fork_result == -1)
     {
@@ -303,7 +303,7 @@ int main(int argc, char** argv)
     }
 
 
-    // TODO: Pipe file input to Scanner Process.
+    // Pipe file input to Scanner Process.
     char* buffer = malloc(1024);
     if(buffer == NULL)
     {
@@ -323,12 +323,12 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    // TODO: Close Scanner Process stdin.
+    // Close Scanner Process stdin.
     if(close(scannerInputPipe[1]) == -1)
     {
         return -1;
     }
-    // TODO: Gracefully wait for children to exit.
+    // Gracefully wait for children to exit.
     wait(NULL);
     wait(NULL);
     wait(NULL);
