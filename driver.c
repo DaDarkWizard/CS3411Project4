@@ -6,8 +6,13 @@
  * Driver for the IPC Program.
  */
 
-
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <string.h>
+#include <sys/wait.h>
 
 int close_descs(int amount, int* fds)
 {
@@ -83,7 +88,7 @@ int main(int argc, char** argv)
         }
         if(close(evenOutputPipe[0]))
         {
-            return -1;.
+            return -1;
         }
         
         if(close(0))
@@ -161,7 +166,7 @@ int main(int argc, char** argv)
         }
         if(close(oddOutputPipe[0]))
         {
-            return -1;.
+            return -1;
         }
         
         if(close(0))

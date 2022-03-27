@@ -1,9 +1,9 @@
 CC = gcc
-CFLAGS = -g -Wall -std=c99
+CFLAGS = -g -Wall -std=c99 -D_POSIX_C_SOURCE
 DEPS = 
 OBJ = driver.o scanner.o evenodd.o
 MAIN = driver scanner evenodd
-BUILD = #-lcrypto -lssl
+BUILD =  #-lcrypto -lssl
 
 driver: driver.o scanner evenodd
 	$(CC) $(CFLAGS) $(BUILD) -o driver driver.o

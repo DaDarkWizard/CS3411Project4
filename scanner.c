@@ -6,6 +6,13 @@
  * Scanner for the IPC Project.
  */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/types.h>
+#include <ctype.h>
+
 // Public variables so they can be access from the signal handler.
 int even_out;
 int odd_out;
@@ -15,7 +22,7 @@ char* buffer;
 void sigterm_handler(int sig_num)
 {
     // Print out the even words.
-    if(write(1, "Words with even letters:\n") == -1) exit(-1);
+    if(write(1, "Words with even letters:\n", 26) == -1) exit(-1);
     int read_result = read(even_out, buffer, 1024);
     while(read_result != 0)
     {
@@ -31,7 +38,7 @@ void sigterm_handler(int sig_num)
     if(close(even_out) == -1) exit(-1);
 
     // Read the odd words.
-    if(write(1, "Words with odd letters:\n") == -1) exit(-1);
+    if(write(1, "Words with odd letters:\n", 25) == -1) exit(-1);
     read_result = read(odd_out, buffer, 1024);
     while(read_result != 0)
     {
@@ -88,7 +95,7 @@ int main(int argc, char** argv)
     sigaction(SIGTERM, &act, NULL);
 
     // Read all input.
-    int read_return_value = read(stdin, buffer, 1024);
+    int read_return_value = read(0, buffer, 1024);
     while(read_return_value != 0)
     {
         // Check for read failure.
@@ -169,7 +176,7 @@ int main(int argc, char** argv)
         }
 
         // Read the next set of characters.
-        int read_return_value = read(stdin, buffer, 1024);
+        read_return_value = read(0, buffer, 1024);
     }
 
     // Free our word buffer.
@@ -186,7 +193,7 @@ int main(int argc, char** argv)
     }
     
     // Write a '*' every second.
-    while(true)
+    while(1)
     {
         sleep(1);
         write(1, "*", 1);
