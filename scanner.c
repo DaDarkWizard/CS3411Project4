@@ -22,7 +22,7 @@ char* buffer;
 void sigterm_handler(int sig_num)
 {
     // Print out the even words.
-    if(write(1, "Words with even letters:\n", 26) == -1) exit(-1);
+    if(write(1, "\nWords with even letters:\n", 27) == -1) exit(-1);
     int read_result = read(even_out, buffer, 1024);
     while(read_result != 0)
     {
@@ -147,6 +147,8 @@ int main(int argc, char** argv)
                 {
                     return -1;
                 }
+
+                if(write(write_location, " ", 1) == -1) return -1;
 
                 // Reset the current word index.
                 current_word_index = 0;

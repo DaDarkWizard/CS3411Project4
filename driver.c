@@ -69,9 +69,87 @@ int main(int argc, char** argv)
         return -1;
     }
 
+    
+    // Create Scanner Process.
+    int fork_result = fork();
+    if(fork_result == -1)
+    {
+        return -1;
+    }
+    else if(fork_result == 0)
+    {
+        if(close(evenInputPipe[0]) == -1)
+        {
+            return -1;
+        }
+        if(close(evenOutputPipe[1]) == -1)
+        {
+            return -1;
+        }
+        if(close(oddInputPipe[0]) == -1)
+        {
+            return -1;
+        }
+        if(close(oddOutputPipe[1]) == -1)
+        {
+            return -1;
+        }
+        if(close(scannerInputPipe[1]) == -1)
+        {
+            return -1;
+        }
+
+        if(close(0) == -1)
+        {
+            return -1;
+        }
+
+        if(dup(scannerInputPipe[0]) == -1)
+        {
+            return -1;
+        }
+
+        if(close(scannerInputPipe[0]) == -1)
+        {
+            return -1;
+        }
+
+        char** args = malloc(sizeof(char*) * 6);
+        if(args == NULL)
+        {
+            return -1;
+        }
+
+        args[0] = malloc(10);
+        if(args[0] == NULL)
+        {
+            return -1;
+        }
+        for(int i = 1; i < 5; i++)
+        {
+            args[i] = malloc(10);
+            if(args[i] == NULL)
+            {
+                return -1;
+            }
+        }
+
+        strcpy(args[0], "./scanner");
+        sprintf(args[1], "%d", evenInputPipe[1]);
+        sprintf(args[2], "%d", evenOutputPipe[0]);
+        sprintf(args[3], "%d", oddInputPipe[1]);
+        sprintf(args[4], "%d", oddOutputPipe[0]);
+        args[5] = NULL;
+
+        execvp(args[0], args);
+        return -1;
+    }
+
+    int scanner_id = fork_result;
+
     // Create Even Process.
     
-    pid_t fork_result = fork();
+    fork_result = fork();
     if(fork_result == -1)
     {
         return -1;
@@ -131,14 +209,13 @@ int main(int argc, char** argv)
         {
             return -1;
         }
-        args[1] = malloc(2);
+        args[1] = malloc(15);
         if(args[1] == NULL)
         {
             return -1;
         }
         strcpy(args[0], "./even");
-        args[1][0] = '0';
-        args[1][1] = '\0';
+        sprintf(args[1], "%d", scanner_id);
 
         execvp(args[0], args);
         return -1;
@@ -221,80 +298,7 @@ int main(int argc, char** argv)
         execvp(args[0], args);
         return -1;
     }
-    // Create Scanner Process.
-    fork_result = fork();
-    if(fork_result == -1)
-    {
-        return -1;
-    }
-    else if(fork_result == 0)
-    {
-        if(close(evenInputPipe[0]) == -1)
-        {
-            return -1;
-        }
-        if(close(evenOutputPipe[1]) == -1)
-        {
-            return -1;
-        }
-        if(close(oddInputPipe[0]) == -1)
-        {
-            return -1;
-        }
-        if(close(oddOutputPipe[1]) == -1)
-        {
-            return -1;
-        }
-        if(close(scannerInputPipe[1]) == -1)
-        {
-            return -1;
-        }
 
-        if(close(0) == -1)
-        {
-            return -1;
-        }
-
-        if(dup(scannerInputPipe[0]) == -1)
-        {
-            return -1;
-        }
-
-        if(close(scannerInputPipe[0]) == -1)
-        {
-            return -1;
-        }
-
-        char** args = malloc(sizeof(char*) * 6);
-        if(args == NULL)
-        {
-            return -1;
-        }
-
-        args[0] = malloc(10);
-        if(args[0] == NULL)
-        {
-            return -1;
-        }
-        for(int i = 1; i < 5; i++)
-        {
-            args[i] = malloc(10);
-            if(args[i] == NULL)
-            {
-                return -1;
-            }
-        }
-
-        strcpy(args[0], "./scanner");
-        sprintf(args[1], "%d", evenInputPipe[1]);
-        sprintf(args[2], "%d", evenOutputPipe[0]);
-        sprintf(args[3], "%d", oddInputPipe[1]);
-        sprintf(args[4], "%d", oddOutputPipe[0]);
-        args[5] = NULL;
-
-        execvp(args[0], args);
-        return -1;
-    }
 
 
     // Close extra descriptors.
